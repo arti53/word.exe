@@ -1,5 +1,6 @@
 #include <stdio.h>
 #include <stdlib.h>
+#include <stdbool.h>
 
 // Definition for a binary tree node.
 struct node {
@@ -16,39 +17,38 @@ struct node *newNode(int val) {
 }
 
 // Function to insert a node into the binary search tree.
-Node* insertNode(Node* root, int data) {
-    Node* newNode = createNode(data);
+struct node* insertNode(struct node* root, int data) {
     if (root == NULL) {
-        return newNode;
+        return newNode(data);
     }
 
-    Node* current = root;
-    Node* parent = NULL;
+    struct node* current = root;
+    struct node* parent = NULL;
+    struct node* new_Node = newNode(data);
 
     while (current != NULL) {
         parent = current;
         if (data < current->data) {
             if (current->left == NULL) {
-                parent->left = newNode;
+                parent->left = new_Node;
                 return root;
             }
             current = current->left;
         } else if (data > current->data) {
             if (current->right == NULL) {
-                parent->right = newNode;
+                parent->right = new_Node;
                 return root;
             }
             current = current->right;
         } else {
             // If the data already exists in the tree, do nothing
-            free(newNode); // Free the allocated memory for the new node
+            free(new_Node); // Free the allocated memory for the new node
             return root;
         }
     }
 
-    return root; // This line is added to handle edge cases
+    return root;
 }
-
 
 // Function to create the mirror image of the tree.
 void mirror(struct node *root) {
@@ -138,37 +138,37 @@ void menu() {
     struct node *foundNode;
 
     while (1) {
-        // printf("\nMenu:\n");
-        // printf("1. Insert\n");
-        // printf("2. Mirror Image\n");
-        // printf("3. Find\n");
-        // printf("4. Height of the tree\n");
-        // printf("5. Display Tree\n");
-        // printf("6. Exit\n");
-        // printf("Enter your choice: ");
+        printf("\nMenu:\n");
+        printf("1. Insert\n");
+        printf("2. Mirror Image\n");
+        printf("3. Find\n");
+        printf("4. Height of the tree\n");
+        printf("5. Display Tree\n");
+        printf("6. Exit\n");
+        printf("Enter your choice: ");
         scanf("%d", &choice);
 
         switch (choice) {
             case 1:
-                printf("Enter value to insert: \n");
+                printf("Enter value to insert: ");
                 scanf("%d", &val);
-                root = insert(root, val);
+                root = insertNode(root, val);
                 printf("%d inserted into the BST.\n", val);
                 break;
             case 2:
-                printf("Original Tree (In-order): \n");
+                printf("Original Tree (In-order): ");
                 inOrderTraversal(root);
                 printf("\n");
 
                 mirror(root);
                 printf("Mirror image of the BST created.\n");
 
-                printf("Mirrored Tree (In-order): \n");
+                printf("Mirrored Tree (In-order): ");
                 inOrderTraversal(root);
                 printf("\n");
                 break;
             case 3:
-                printf("Enter value to find: \n");
+                printf("Enter value to find: ");
                 scanf("%d", &val);
                 foundNode = find(root, val);
                 if (foundNode != NULL) {
@@ -181,7 +181,7 @@ void menu() {
                 printf("Height of the BST is %d.\n", height(root));
                 break;
             case 5:
-                printf("Tree (In-order): \n");
+                printf("Tree (In-order): ");
                 inOrderTraversal(root);
                 printf("\n");
                 break;
@@ -200,24 +200,23 @@ int main() {
 }
 
 
-
-1
-23
-1
-19
-1
-25
-1
-17
-1
-21
-1
-24
-1
-28
-2
-3
-15
-4
-5
-6
+// 1
+// 23
+// 1
+// 19
+// 1
+// 25
+// 1
+// 17
+// 1
+// 21
+// 1
+// 24
+// 1
+// 28
+// 2
+// 3
+// 15
+// 4
+// 5
+// 6
