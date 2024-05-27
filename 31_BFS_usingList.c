@@ -1,155 +1,184 @@
-#include <stdio.h>
-#include <stdlib.h>
+#include<stdio.h>
+#include<stdlib.h>
+#include<stdbool.h>
 
-struct node{
-    int data;
-    struct node *next;
-};
+#define N 100
+int queue[N];
+int front = -1, rear = -1;
 
-struct queue {
-    struct node *front, *rear;
-};
-
-struct node *A[10];
-int n;
-
-struct queue* create() {
-    struct queue* q = (struct queue*)malloc(sizeof(struct queue));
-    q->front = q->rear = NULL;
-    return q;
+void enqueue(int x){
+    if (rear == N - 1) {
+        printf("Queue Overflow\n");
+        exit(1);
+    }
+    if (front == -1)
+        front = 0;
+    rear = rear + 1;
+    queue[rear] = x;
 }
 
-void enqueue(struct queue* q, int data) {
-    struct node* temp = (struct node*)malloc(sizeof(struct node));
-    temp->data = data;
-    temp->next = NULL;
-    
-    if (q->rear == NULL) {
-        q->front = q->rear = temp;
-        return;
+int dequeue(){
+    if (front == -1 || front > rear) {
+        printf("Queue Underflow\n");
+        exit(1);
+    }
+    int x = queue[front];
+    front = front + 1;
+    return x;
+}
+
+bool queueempty(){
+    return front == -1 || front > rear;
+}
+
+struct vertex_node{
+    int vertex_number;
+    struct vertex_node* next;
+};
+
+struct graph{
+    int no_of_vertices;
+    struct vertex_node **A;
+};
+
+struct graph* createGraph(int V){
+    struct graph* g = (struct graph*)malloc(sizeof(struct graph));
+
+    g->no_of_vertices = V;
+    g->A = (struct vertex_node**)malloc(V * sizeof(struct vertex_node));
+
+    for(int i = 0;i<V;i++){
+        g->A[i] = NULL;
     }
 
-    q->rear->next = temp;
-    q->rear = temp;
+    return g;
 }
 
-int dequeue(struct queue* q) {
-    if (q->front == NULL)
-        return -1;
-    
-    struct node* temp = q->front;
-    int data = temp->data;
-    q->front = q->front->next;
+struct vertex_node* createVertex(int data){
+    struct vertex_node* ver = (struct vertex_node*)malloc(sizeof(struct vertex_node));
 
-    if (q->front == NULL)
-        q->rear = NULL;
+    ver->vertex_number = data;
+    ver->next = NULL;
 
-    free(temp);
-    return data;
+    return ver;
 }
 
-int queueEmpty(struct queue* q) {
-    return (q->front == NULL);
+void createAdjList(int v, struct graph* g, int e){
+
+    int a, b;
+    struct vertex_node* temp;
+    struct vertex_node* newnode;
+    for(int i = 0;i<e;i++){
+
+       scanf("%d %d", &a, &b);
+
+       newnode = createVertex(a);
+        temp = g->A[b];
+
+        if(temp == NULL){
+            g->A[b] = newnode;
+        }
+        else{
+            while(temp->next != NULL){
+                temp = temp ->next;
+            }
+            temp->next = newnode;
+        }
+
+        newnode = createVertex(b);
+        temp = g->A[a];
+
+        if(temp == NULL){
+            g->A[a] = newnode;
+        }
+        else{
+            while(temp->next != NULL){
+                temp = temp ->next;
+            }
+            temp->next = newnode;
+        }
+    }
+
 }
 
-void BFS(int start){
-    int visited[10];
-    struct node *p;
+void BFS(struct graph* g, int V){
 
-    for (int i = 1; i <= n; i++){
+    int visited[V];
+    int s;
+    struct vertex_node* temp;
+
+    printf("Enter the start vertex : \n");
+    scanf("%d", &s);
+
+    for(int i = 0;i<V;i++){
         visited[i] = 0;
     }
 
-    struct queue* q = create();
-    enqueue(q, start);
-    visited[start] = 1;
+    visited[s] = 1;
 
-    while (!queueEmpty(q)){
-        int v = dequeue(q);
-        printf("-%d", v);
-        p = A[v];
+    enqueue(s);
 
-        while (p != NULL){
-            if (visited[p->data] == 0){
-                enqueue(q, p->data);
-                visited[p->data] = 1;
+    while (!queueempty())
+    {
+        int w = dequeue();
+        printf("%d ", w);
+        temp = g->A[w];
+        while (temp != NULL)
+        {
+            int i = temp->vertex_number;
+            if (visited[i] == 0)
+            {
+                enqueue(i);
+                visited[i] = 1;
             }
-            p = p->next;
-        }
-    }
-}
-
-void printAdjacencyList() {
-    for (int i = 1; i <= n; i++) {
-        struct node* temp = A[i];
-        printf("Adjacency list of vertex %d: ", i);
-        while (temp) {
-            printf("%d -> ", temp->data);
             temp = temp->next;
         }
-        printf("NULL\n");
     }
 }
-int main(){
-    int u, v;
-    char ch;
-    printf("Enter the no of vertices: ");
-    scanf("%d", &n);
 
-    for (int i = 1; i <= n; i++){
-        A[i] = NULL;
+void display(int v, struct graph* g){
+
+     for (int i = 0; i < g->no_of_vertices; i++)
+    {
+        struct vertex_node *p = g->A[i];
+        printf("%d | ", i);
+        while (p != NULL)
+        {
+            printf("%d -> ", p->vertex_number);
+            p = p->next;
+        }
+        printf("NULL");
+        printf("\n");
     }
+}
+int main()
+{
+    int V, e;
+    printf("the number of vertices in the graph : ");
+    scanf("%d", &V);
 
-    struct node *new, *p;
-    do{
-        printf("\nEnter edge: ");
-        scanf("%d %d", &u, &v);
+    printf("Enter the number of edges:");
+    scanf("%d", &e);
+    struct graph* g = createGraph(V);
 
-        new = (struct node *)malloc(sizeof(struct node));
-        new->data = v;
-        new->next = NULL;
-        p = A[u];
+    printf("Enter the start and end vertex for an edge: \n");
+    createAdjList(V, g, e);
 
-        if (p == NULL){
-            A[u] = new;
-        }
-        else{
-            while (p->next != NULL)
-            {
-                p = p->next;
-            }
-            p->next = new;
-        }
+    display(V, g);
 
-        new = (struct node *)malloc(sizeof(struct node));
-        new->data = u;
-        new->next = NULL;
-        p = A[v];
-
-        if (p == NULL){
-            A[v] = new;
-        }
-        else{
-            while (p->next != NULL)
-            {
-                p = p->next;
-            }
-            p->next = new;
-        }
-
-        printf("\nDo you want to enter more edges (y/n): ");
-        scanf(" %c", &ch);
-    } while (ch == 'y' || ch == 'Y');
-
-     printf("\nAdjacency List:\n");
-    printAdjacencyList();
-
-    int startVertex;
-    printf("\nEnter the start vertex: ");
-    scanf("%d", &startVertex);
-
-    printf("\nBFS Traversal: ");
-    BFS(startVertex);
+    printf("BFS Traversal: ");
+    BFS(g, V);
 
     return 0;
 }
+
+
+// 5
+// 6
+// 0 1
+// 0 2
+// 1 4
+// 1 3
+// 1 2
+// 4 3
+// 0
