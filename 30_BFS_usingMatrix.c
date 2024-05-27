@@ -1,112 +1,152 @@
-#include<stdio.h>
-#include<stdlib.h>
+#include <stdio.h>
+#include <stdlib.h>
 
-#define max 100
-int n,top = -1;
+struct stack
+{
+    int capacity;
+    int top;
+    int *arr;
+};
 
-int queue[max];
-int f = -1, r = -1;
+struct stack *createStack(int capacity)
+{
+    struct stack *st = (struct stack *)malloc(sizeof(struct stack));
+    st->capacity = capacity;
+    st->top = -1;
+    st->arr = (int *)malloc(sizeof(int) * st->capacity);
+    return st;
+}
 
-int stackempty(){
-    if(top == -1){
-        return 0;
+void push(struct stack *st, int data)
+{
+    if (st->top >= st->capacity)
+    {
+        return;
     }
-    else{
+
+    st->arr[++st->top] = data;
+}
+
+int isEmpty(struct stack *st)
+{
+    if (st->top < 0)
+    {
         return 1;
     }
+
+    return 0;
 }
-void nq(int c) {
-    if (r == n - 1) {
-        printf("\nQueue full\n");
-    } else {
-        if (f == -1) {
-            f = 0;
-        }
-        r++;
-        queue[r] = c;
+
+int pop(struct stack *st)
+{
+    if (isEmpty(st))
+    {
+        return -1;
     }
+
+    return st->arr[st->top--];
 }
 
-int dq() {
-    int a = -1;
-    if (f == -1 || f > r) {
-        printf("Queue empty\n");
-    } else {
-       a = queue[f++];
-       if(f > r){
-        f = r = -1;
-       }
+struct queue
+{
+    int f, r;
+    int capacity;
+    int *arr;
+};
+
+struct queue *createQueue(int capacity)
+{
+    struct queue *q = (struct queue *)malloc(sizeof(struct queue));
+    q->f = q->r = -1;
+    q->capacity = capacity;
+    q->arr = (int *)malloc(sizeof(int) * q->capacity);
+    return q;
+}
+
+void enqueue(struct queue *q, int value)
+{
+    if (q->r == q->capacity - 1)
+    {
+        printf("full\n");
+        return;
     }
-    return a;
+    q->arr[++q->r] = value;
 }
 
-int queueempty() {
-    if (r == -1 && f == -1) {
-        return 0;
-    } else {
-        return 1;
+int dequeue(struct queue *q)
+{
+    if (q->f == q->r)
+    {
+        printf("Empty \n");
+        return -1;
     }
+
+    return q->arr[++q->f];
 }
 
-void BFS(int G[10][10], int n) {
-    int visited[10], v;
-
-    for (int i = 1; i <= n; i++) {
+void BFS(int v, int g[v][v]) // matrix
+{
+    int visited[v], start, w;
+    struct queue *q = createQueue(v);
+    printf("Enter start vertex : ");
+    scanf("%d", &start);
+    enqueue(q, start);
+    for (int i = 0; i < v; i++)
+    {
         visited[i] = 0;
     }
-
-    printf("\nEnter start vertex : ");
-    scanf("%d", &v);
-
-    nq(v);
-    visited[v] = 1;
-
-    while (queueempty() != 0) {
-        v = dq();
-        printf("-%d", v);
-
-        for (int i = 1; i <= n; i++) {
-            if (G[v][i] == 1 && visited[i] == 0) {
-                nq(i);
-                visited[i] = 1; 
+    visited[start] = 1;
+    while (q->f != q->r)
+    {
+        w = dequeue(q);
+        printf("%d ", w);
+        for (int i = 0; i < v; i++)
+        {
+            if (g[w][i] == 1 && visited[i] == 0)
+            {
+                enqueue(q, i);
+                visited[i] = 1;
             }
         }
     }
 }
 
-int main() {
-    int G[10][10];
-    int a, b, e;
 
-    printf("Enter the no of vertex : ");
+void main()
+{
+    int n, e, u, v;
+    printf("Enter number of vertices : ");
     scanf("%d", &n);
-
-    for (int i = 1; i <= n; i++) {
-        for (int j = 1; j <= n; j++) {
-            G[i][j] = 0;
+    int adjMatrix[n][n];
+    for (int i = 0; i < n; i++)
+    {
+        for (int j = 0; j < n; j++)
+        {
+            adjMatrix[i][j] = 0;
         }
     }
-
-    printf("\nEnter the no of edges : ");
+    printf("Enter number of edges : ");
     scanf("%d", &e);
-
-    for (int i = 0; i < e; i++) {
-        printf("\nEnter edge : \n");
-        scanf("%d %d", &a, &b);
-        G[a][b] = G[b][a] = 1;
+    for (int i = 0; i < e; i++)
+    {
+        printf("Enter edge (start - end) : ");
+        scanf("%d %d", &u, &v);
+        adjMatrix[u][v] = adjMatrix[v][u] = 1;
     }
 
-    for (int i = 1; i <= n; i++) {
-        for (int j = 1; j <= n; j++) {
-            printf("%5d ", G[i][j]);
+    for (int i = 0; i < n; i++)
+    {
+        for (int j = 0; j < n; j++)
+        {
+            printf("%d ", adjMatrix[i][j]);
         }
         printf("\n");
     }
 
-    int m;
-                BFS(G,n);
-               
+    BFS(n, adjMatrix);
+    
 }
+
 
 // 5
 // 6
