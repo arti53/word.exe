@@ -182,22 +182,47 @@ int height(TreeNode* root) {
 // Main function to demonstrate the operations
 int main() {
     TreeNode* root = NULL;
-    int nodes[] = {1, 2, 3, 4, 5, 6, 7};
-    int n = sizeof(nodes) / sizeof(nodes[0]);
-    for (int i = 0; i < n; i++) {
-        insert(&root, nodes[i]);
+    int choice, value;
+
+    while (1) {
+        printf("\nMenu:\n");
+        printf("1. Insert a node\n");
+        printf("2. Display level-wise traversal\n");
+        printf("3. Display leaf nodes\n");
+        printf("4. Count leaf nodes\n");
+        printf("5. Display height of the tree\n");
+        printf("6. Exit\n");
+        printf("Enter your choice: ");
+        scanf("%d", &choice);
+
+        switch (choice) {
+            case 1:
+                printf("Enter the value to insert: ");
+                scanf("%d", &value);
+                insert(&root, value);
+                break;
+            case 2:
+                printf("Level-wise Traversal: ");
+                levelOrderTraversal(root);
+                printf("\n");
+                break;
+            case 3:
+                printf("Leaf Nodes: ");
+                displayLeafNodes(root);
+                printf("\n");
+                break;
+            case 4:
+                printf("Total Number of Leaf Nodes: %d\n", countLeafNodes(root));
+                break;
+            case 5:
+                printf("Height of the Tree: %d\n", height(root));
+                break;
+            case 6:
+                exit(0);
+            default:
+                printf("Invalid choice. Please try again.\n");
+        }
     }
-
-    printf("Level-wise Traversal: ");
-    levelOrderTraversal(root);
-    printf("\n");
-
-    printf("Leaf Nodes: ");
-    displayLeafNodes(root);
-    printf("\n");
-
-    printf("Total Number of Leaf Nodes: %d\n", countLeafNodes(root));
-    printf("Height of Tree: %d\n", height(root));
 
     return 0;
 }
