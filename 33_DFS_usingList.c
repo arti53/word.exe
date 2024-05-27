@@ -1,146 +1,175 @@
-#include <stdio.h>
-#include <stdlib.h>
+#include<stdio.h>
+// #include <conio.h>
+#include<stdlib.h>
+#include<stdbool.h>
 
-#define MAX 100
+#define N 100
+int stack[N];
+int top = - 1;
 
-struct node {
-    int data;
-    struct node *next;
+void push(int x){
+    stack[++top] = x;
+}
+
+int pop(){
+    int x = stack[top];
+    top = top - 1;
+    return x;
+}
+
+bool stackempty(){
+    return top == -1;
+}
+
+struct vertex_node{
+    int vertex_number;
+    struct vertex_node* next;
 };
 
-struct node *A[10];
-
-struct StackNode {
-    int data;
-    struct StackNode* next;
+struct graph{
+    int no_of_vertices;
+    struct vertex_node **A;
 };
 
-struct StackNode* top = NULL;
+struct graph* createGraph(int V){
+    struct graph* g = (struct graph*)malloc(sizeof(struct graph));
 
-int isEmpty() {
-    return top == NULL;
-}
+    g->no_of_vertices = V;
+    g->A = (struct vertex_node**)malloc(V * sizeof(struct vertex_node));
 
-void push(int data) {
-    struct StackNode* newNode = (struct StackNode*)malloc(sizeof(struct StackNode));
-    if (newNode == NULL) {
-        printf("\nStack Overflow\n");
-        return;
+    for(int i = 0;i<V;i++){
+        g->A[i] = NULL;
     }
-    newNode->data = data;
-    newNode->next = top;
-    top = newNode;
+
+    return g;
 }
 
-int pop() {
-    if (isEmpty()) {
-        printf("\nStack Underflow\n");
-        return -1;
+struct vertex_node* createVertex(int data){
+    struct vertex_node* ver = (struct vertex_node*)malloc(sizeof(struct vertex_node));
+
+    ver->vertex_number = data;
+    ver->next = NULL;
+
+    return ver;
+}
+
+void createAdjList(int v, struct graph* g, int e){
+
+    int a, b;
+    struct vertex_node* temp;
+    struct vertex_node* newnode;
+    for(int i = 0;i<e;i++){
+
+       scanf("%d %d", &a, &b);
+
+       newnode = createVertex(a);
+        temp = g->A[b];
+
+        if(temp == NULL){
+            g->A[b] = newnode;
+        }
+        else{
+            while(temp->next != NULL){
+                temp = temp ->next;
+            }
+            temp->next = newnode;
+        }
+
+        newnode = createVertex(b);
+        temp = g->A[a];
+
+        if(temp == NULL){
+            g->A[a] = newnode;
+        }
+        else{
+            while(temp->next != NULL){
+                temp = temp ->next;
+            }
+            temp->next = newnode;
+        }
     }
-    struct StackNode* temp = top;
-    int data = temp->data;
-    top = top->next;
-    free(temp);
-    return data;
+
 }
 
-void DFS(struct node *A[], int n) {
-    int visited[10], v;
-    struct node *p;
+void DFS(struct graph* g, int V){
 
-    for (int i = 1; i <= n; i++) {
+    int visited[V];
+    int s;
+    struct vertex_node* temp;
+
+    printf("Enter the start vertex : \n");
+    scanf("%d", &s);
+
+    for(int i = 0;i<V;i++){
         visited[i] = 0;
     }
 
-    printf("\nEnter start vertex : ");
-    scanf("%d", &v);
+    visited[s] = 1;
 
-    visited[v] = 1;
-    printf("-%d", v);
-    push(v);
+    push(s);
 
-    while (!isEmpty()) {
-        v = top->data;
-        p = A[v];
-        int found = 0;
-
-        while (p != NULL) {
-            if (visited[p->data] == 0) {
-                visited[p->data] = 1;
-                printf("-%d", p->data);
-                push(p->data);
-                found = 1;
-                break;
+ while (!stackempty())
+    {
+        int w = pop();
+        printf("%d ", w);
+        temp = g->A[w];
+        while (temp != NULL)
+        {
+            int i = temp->vertex_number;
+            if (visited[i] == 0)
+            {
+                push(i);
+                visited[i] = 1;
             }
-            p = p->next;
-        }
-
-        if (!found) {
-            pop();
+            temp = temp->next;
         }
     }
+
+
+
 }
 
-void displayGraph(struct node *A[], int n) {
-    printf("\nAdjacency List:\n");
-    for (int i = 1; i <= n; i++) {
-        struct node *p = A[i];
-        printf("%d: ", i);
-        while (p != NULL) {
-            printf("%d -> ", p->data);
+void display(int v, struct graph* g){
+
+     for (int i = 0; i < g->no_of_vertices; i++)
+    {
+        struct vertex_node *p = g->A[i];
+        printf("%d | ", i);
+        while (p != NULL)
+        {
+            printf("%d -> ", p->vertex_number);
             p = p->next;
         }
-        printf("NULL\n");
+        printf("NULL");
+        printf("\n");
     }
 }
+int main()
+{
+    int V,data,e;
+    printf("the number of vertices in the graph : ");
+    scanf("%d", &V);
 
-int main() {
-    int u, v, n;
-    char ch;
-    printf("Enter the no of vertex : ");
-    scanf("%d", &n);
+    printf("Enter the number of edges:");
+    scanf("%d", &e);
+    struct graph* g = createGraph(V);
 
-    for (int i = 1; i <= n; i++) {
-        A[i] = NULL;
-    }
+    printf("Enter the start and end vertex for a edge: \n");
+    createAdjList(V, g,e);
 
-    struct node *new, *p;
-    do {
-        printf("\nEnter edge :");
-        scanf("%d %d", &u, &v);
+    display(V, g);
 
-        new = (struct node *)malloc(sizeof(struct node));
-        new->data = v;
-        new->next = NULL;
-        p = A[u];
+    DFS(g, V);
 
-        if (p == NULL) {
-            A[u] = new;
-        } else {
-            while (p->next != NULL) {
-                p = p->next;
-            }
-            p->next = new;
-        }
-
-        new = (struct node *)malloc(sizeof(struct node));
-        new->data = u;
-        new->next = NULL;
-        p = A[v];
-
-        if (p == NULL) {
-            A[v] = new;
-        } else {
-            while (p->next != NULL) {
-                p = p->next;
-            }
-            p->next = new;
-        }
-        printf("\nYou want to enter more edges (y/n) : ");
-        scanf(" %c", &ch);
-    } while (ch == 'y' || ch == 'Y');
-
-    displayGraph(A, n);
-    DFS(A, n);
     return 0;
 }
+
+// 5
+// 6
+// 0 1
+// 0 2
+// 1 4
+// 1 3
+// 1 2
+// 4 3
+// 0
