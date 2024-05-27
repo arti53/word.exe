@@ -193,23 +193,42 @@ Node* dequeue(Queue** front, Queue** rear) {
 int main() {
     Node* root = NULL;
 
-    root = insertNode(root, 10);
-    root = insertNode(root, 5);
-    root = insertNode(root, 15);
-    root = insertNode(root, 3);
-    root = insertNode(root, 7);
-    root = insertNode(root, 12);
-    root = insertNode(root, 18);
+    int choice, data;
+    while (1) {
+        printf("\nMenu:\n");
+        printf("1. Insert node\n");
+        printf("2. Level order traversal\n");
+        printf("3. Mirror the tree\n");
+        printf("4. Tree height\n");
+        printf("5. Exit\n");
+        printf("Enter your choice: ");
+        scanf("%d", &choice);
 
-    printf("Level order traversal: ");
-    levelOrderTraversal(root);
-
-    root = mirrorImage(root);
-
-    printf("Level order traversal after mirroring: ");
-    levelOrderTraversal(root);
-
-    printf("Height of the tree: %d\n", treeHeight(root));
+        switch (choice) {
+            case 1:
+                printf("Enter the data to insert: ");
+                scanf("%d", &data);
+                root = insertNode(root, data);
+                break;
+            case 2:
+                printf("Level order traversal: ");
+                levelOrderTraversal(root);
+                break;
+            case 3:
+                root = mirrorImage(root);
+                printf("Tree has been mirrored.\n");
+                break;
+            case 4:
+                printf("Height of the tree: %d\n", treeHeight(root));
+                break;
+            case 5:
+                printf("Exiting...\n");
+                exit(0);
+                break;
+            default:
+                printf("Invalid choice. Please try again.\n");
+        }
+    }
 
     return 0;
 }
