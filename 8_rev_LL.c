@@ -42,21 +42,6 @@ void insertAtEnd(struct Node** head, int data) {
     newNode->prev = temp;
 }
 
-// Function to insert a node after a given node
-void insertAfter(struct Node* prevNode, int data) {
-    if (prevNode == NULL) {
-        printf("Previous node cannot be NULL\n");
-        return;
-    }
-    struct Node* newNode = createNode(data);
-    newNode->next = prevNode->next;
-    prevNode->next = newNode;
-    newNode->prev = prevNode;
-    if (newNode->next != NULL) {
-        newNode->next->prev = newNode;
-    }
-}
-
 // Function to delete the first node
 void deleteFirstNode(struct Node** head) {
     if (*head == NULL) {
@@ -124,6 +109,26 @@ void printList(struct Node* node) {
     printf("\n");
 }
 
+// Function to reverse the list
+void Reverse(struct Node** head) {
+    struct Node *temp = NULL;
+    struct Node *current = *head;
+
+    // Swap next and prev for all nodes in the list
+    while (current != NULL) {
+        temp = current->prev;
+        current->prev = current->next;
+        current->next = temp;
+        current = current->prev;
+    }
+
+    // Before changing the head, check for the cases like empty list
+    // and list with only one node
+    if (temp != NULL) {
+        *head = temp->prev;
+    }
+}
+
 int main() {
     struct Node* head = NULL;
     int choice, data;
@@ -135,7 +140,8 @@ int main() {
         printf("3. Delete the first node\n");
         printf("4. Delete the last node\n");
         printf("5. Print the list\n");
-        printf("6. Exit\n");
+        printf("6. Reverse the list\n");
+        printf("7. Exit\n");
         printf("Enter your choice: ");
         scanf("%d", &choice);
 
@@ -161,6 +167,10 @@ int main() {
                 printList(head);
                 break;
             case 6:
+                Reverse(&head);
+                printf("List reversed.\n");
+                break;
+            case 7:
                 printf("Exiting...\n");
                 return 0;
             default:
@@ -169,3 +179,5 @@ int main() {
     }
     return 0;
 }
+
+// input 1 25 1 24 2 34 2 53 5 6 5 7
