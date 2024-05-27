@@ -115,6 +115,7 @@ Node* insert(Node* node, int key) {
     // Return the unchanged node pointer
     return node;
 }
+
 // Function to print nodes at a given level
 void printGivenLevel(Node* root, int level) {
     if (root == NULL)
@@ -142,18 +143,32 @@ void printLevelOrder(Node* root) {
 
 int main() {
     Node* root = NULL;
+    int choice, key;
 
-    // Insert some elements into the AVL tree
-    root = insert(root, 10);
-    root = insert(root, 20);
-    root = insert(root, 30);
-    root = insert(root, 40);
-    root = insert(root, 50);
-    root = insert(root, 25);
+    while (1) {
+        printf("\nMenu:\n");
+        printf("1. Insert a node\n");
+        printf("2. Print level order traversal\n");
+        printf("3. Exit\n");
+        printf("Enter your choice: ");
+        scanf("%d", &choice);
 
-    // Print the AVL tree level-wise
-    printf("Level order traversal of AVL tree:\n");
-    printLevelOrder(root);
+        switch (choice) {
+            case 1:
+                printf("Enter key to insert: ");
+                scanf("%d", &key);
+                root = insert(root, key);
+                break;
+            case 2:
+                printf("Level order traversal of AVL tree:\n");
+                printLevelOrder(root);
+                break;
+            case 3:
+                exit(0);
+            default:
+                printf("Invalid choice. Please try again.\n");
+        }
+    }
 
     return 0;
 }
