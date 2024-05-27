@@ -16,17 +16,39 @@ struct node *newNode(int val) {
 }
 
 // Function to insert a node into the binary search tree.
-struct node *insert(struct node *root, int val) {
+Node* insertNode(Node* root, int data) {
+    Node* newNode = createNode(data);
     if (root == NULL) {
-        return newNode(val);
+        return newNode;
     }
-    if (val < root->data) {
-        root->left = insert(root->left, val);
-    } else {
-        root->right = insert(root->right, val);
+
+    Node* current = root;
+    Node* parent = NULL;
+
+    while (current != NULL) {
+        parent = current;
+        if (data < current->data) {
+            if (current->left == NULL) {
+                parent->left = newNode;
+                return root;
+            }
+            current = current->left;
+        } else if (data > current->data) {
+            if (current->right == NULL) {
+                parent->right = newNode;
+                return root;
+            }
+            current = current->right;
+        } else {
+            // If the data already exists in the tree, do nothing
+            free(newNode); // Free the allocated memory for the new node
+            return root;
+        }
     }
-    return root;
+
+    return root; // This line is added to handle edge cases
 }
+
 
 // Function to create the mirror image of the tree.
 void mirror(struct node *root) {
