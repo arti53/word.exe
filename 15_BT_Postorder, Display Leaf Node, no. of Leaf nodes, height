@@ -15,13 +15,13 @@ typedef struct Queue {
 
 // Function prototypes
 Node* createNode(int data);
-Node* insertNode(Node* root, int data);
 void postorderTraversal(Node* root);
 void displayLeafNodes(Node* root);
 int countLeafNodes(Node* root);
 int treeHeight(Node* root);
 void enqueue(Queue** front, Queue** rear, Node* node);
 Node* dequeue(Queue** front, Queue** rear);
+Node* createbinaryTree();
 
 // Create a new node
 Node* createNode(int data) {
@@ -31,30 +31,15 @@ Node* createNode(int data) {
     return newNode;
 }
 
-// Insert a node into the tree
-Node* insertNode(Node* root, int data) {
-    if (root == NULL) {
-        return createNode(data);
-    }
-
-    Node* current = root;
-    Node* parent = NULL;
-
-    while (current != NULL) {
-        parent = current;
-        if (data < current->data) {
-            current = current->left;
-        } else {
-            current = current->right;
-        }
-    }
-
-    if (data < parent->data) {
-        parent->left = createNode(data);
-    } else {
-        parent->right = createNode(data);
-    }
-
+// Create a predefined binary tree
+Node* createbinaryTree() {
+    Node* root = createNode(20);
+    root->left = createNode(23);
+    root->right = createNode(27);
+    root->left->left = createNode(80);
+    root->left->right = createNode(50);
+    root->right->left = createNode(21);
+    root->right->right = createNode(35);
     return root;
 }
 
@@ -225,41 +210,35 @@ Node* dequeue(Queue** front, Queue** rear) {
 
 // Main function
 int main() {
-    Node* root = NULL;
-    int choice, value;
+    Node* root = createbinaryTree();
+    int choice;
 
     while (1) {
-        printf("\nMenu:\n");
-        printf("1. Insert Node\n");
-        printf("2. Postorder Traversal\n");
-        printf("3. Display Leaf Nodes\n");
-        printf("4. Count Leaf Nodes\n");
-        printf("5. Display Height of Tree\n");
-        printf("6. Exit\n");
-        printf("Enter your choice: ");
+        // printf("\nMenu:\n");
+        // printf("1. Postorder Traversal\n");
+        // printf("2. Display Leaf Nodes\n");
+        // printf("3. Count Leaf Nodes\n");
+        // printf("4. Display Height of Tree\n");
+        // printf("5. Exit\n");
+        // printf("Enter your choice: ");
         scanf("%d", &choice);
 
         switch (choice) {
             case 1:
-                printf("Enter value to insert: ");
-                scanf("%d", &value);
-                root = insertNode(root, value);
-                break;
-            case 2:
                 printf("Postorder Traversal: ");
                 postorderTraversal(root);
                 break;
-            case 3:
+            case 2:
                 printf("Leaf Nodes: ");
                 displayLeafNodes(root);
                 break;
-            case 4:
+            case 3:
                 printf("Total Number of Leaf Nodes: %d\n", countLeafNodes(root));
                 break;
-            case 5:
+            case 4:
                 printf("Height of Tree: %d\n", treeHeight(root));
                 break;
-            case 6:
+            case 5:
                 exit(0);
                 break;
             default:
@@ -269,3 +248,10 @@ int main() {
 
     return 0;
 }
+
+
+//1
+//2
+//3
+//4
+//5
