@@ -116,37 +116,37 @@ void menu() {
     struct node *foundNode;
 
     while (1) {
-        printf("\nMenu:\n");
-        printf("1. Insert\n");
-        printf("2. Mirror Image\n");
-        printf("3. Find\n");
-        printf("4. Height of the tree\n");
-        printf("5. Display Tree\n");
-        printf("6. Exit\n");
-        printf("Enter your choice: ");
+        // printf("\nMenu:\n");
+        // printf("1. Insert\n");
+        // printf("2. Mirror Image\n");
+        // printf("3. Find\n");
+        // printf("4. Height of the tree\n");
+        // printf("5. Display Tree\n");
+        // printf("6. Exit\n");
+        // printf("Enter your choice: ");
         scanf("%d", &choice);
 
         switch (choice) {
             case 1:
-                printf("Enter value to insert: ");
+                printf("Enter value to insert: \n");
                 scanf("%d", &val);
                 root = insert(root, val);
                 printf("%d inserted into the BST.\n", val);
                 break;
             case 2:
-                printf("Original Tree (In-order): ");
+                printf("Original Tree (In-order): \n");
                 inOrderTraversal(root);
                 printf("\n");
 
                 mirror(root);
                 printf("Mirror image of the BST created.\n");
 
-                printf("Mirrored Tree (In-order): ");
+                printf("Mirrored Tree (In-order): \n");
                 inOrderTraversal(root);
                 printf("\n");
                 break;
             case 3:
-                printf("Enter value to find: ");
+                printf("Enter value to find: \n");
                 scanf("%d", &val);
                 foundNode = find(root, val);
                 if (foundNode != NULL) {
@@ -159,7 +159,7 @@ void menu() {
                 printf("Height of the BST is %d.\n", height(root));
                 break;
             case 5:
-                printf("Tree (In-order): ");
+                printf("Tree (In-order): \n");
                 inOrderTraversal(root);
                 printf("\n");
                 break;
@@ -176,3 +176,26 @@ int main() {
     menu();
     return 0;
 }
+
+
+
+1
+23
+1
+19
+1
+25
+1
+17
+1
+21
+1
+24
+1
+28
+2
+3
+15
+4
+5
+6
