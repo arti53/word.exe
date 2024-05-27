@@ -99,16 +99,53 @@ int main() {
     struct Node* front = NULL;
     struct Node* rear = NULL;
     struct Stack* stack = createStack(100); // Adjust the capacity as needed
+    int choice, data;
 
-    enqueue(&front, &rear, stack, 10);
-    enqueue(&front, &rear, stack, 20);
-    enqueue(&front, &rear, stack, 30);
+        printf("\nMenu:\n");
+        printf("1. Enqueue\n");
+        printf("2. Dequeue\n");
+        printf("3. Display Queue\n");
+        printf("4. Exit\n");
+        printf("Enter your choice: ");
 
-    displayQueue(front);
+    while (1) {
+        scanf("%d", &choice);
 
-    printf("Deleted element: %d\n", dequeue(&front, &rear));
-
-    displayQueue(front);
+        switch (choice) {
+            case 1:
+                printf("Enter data to enqueue: \n");
+                scanf("%d", &data);
+                enqueue(&front, &rear, stack, data);
+                break;
+            case 2:
+                data = dequeue(&front, &rear);
+                if (data != -1) {
+                    printf("Dequeued element: %d\n", data);
+                }
+                break;
+            case 3:
+                displayQueue(front);
+                break;
+            case 4:
+                printf("Exiting !!!\n");
+                return 0;
+            default:
+                printf("Invalid choice. Please try again.\n");
+        }
+    }
 
     return 0;
 }
+
+
+// Input 
+// 1
+// 10
+// 1
+// 20
+// 1
+// 30
+// 3
+// 2
+// 3
+// 4
