@@ -18,17 +18,39 @@ struct Node* createNode(int data) {
 
 // Function to insert a node into the BST
 struct Node* insertNode(struct Node* root, int data) {
+        struct Node* newNode = createNode(data);
+
+    // If the tree is empty, return a new node
     if (root == NULL) {
-        return createNode(data);
+        return newNode;
     }
 
-    if (data < root->data) {
-        root->left = insertNode(root->left, data);
-    } else if (data > root->data) {
-        root->right = insertNode(root->right, data);
+    struct Node* current = root;
+    struct Node* parent = NULL;
+
+    // Traverse the tree to find the insertion point
+    while (current != NULL) {
+        parent = current;
+        if (data < current->data) {
+            current = current->left;
+        } else if (data > current->data) {
+            current = current->right;
+        } else {
+            // If the data is already in the tree, do nothing and return the root
+            free(newNode);
+            return root;
+        }
+    }
+
+    // Insert the new node as a child of the parent node
+    if (data < parent->data) {
+        parent->left = newNode;
+    } else {
+        parent->right = newNode;
     }
 
     return root;
+
 }
 
 // Stack structure for non-recursive traversal
