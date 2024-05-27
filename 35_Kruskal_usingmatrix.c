@@ -90,21 +90,30 @@ int matrix() {
 
 int main() {
     int m, f;
-    while (1) {
-        printf("\n1. Kruskal Algorithm using matrix \n2. Exit \n");
-        printf("\nEnter which algorithm: ");
-        scanf("%d", &m);
-        switch (m) {
-            case 1:
                 f = matrix();
                 kruskalmatrix(G, f);
-                break;
-            case 2:
-                exit(0);
-            default:
-                printf("\nEnter a valid option.");
-        }
-    }
+           
 
     return 0;
 }
+
+// 10 
+// 18
+// 0 1 2
+// 1 3 6
+// 1 7 2
+// 1 5 4
+// 1 2 2 
+// 2 5 3 
+// 2 8 7
+// 2 4 1 
+// 2 3 4
+// 3 4 3
+// 4 9 2 
+// 5 6 4
+// 5 8 7
+// 6 8 3 
+// 6 9 1
+// 7 6 10
+// 8 9 5
+// 0
