@@ -171,6 +171,7 @@ void display(struct graph *g)
             printf("%d -> ", p->vertex);
             p = p->next;
         }
+        printf("Null");
         printf("\n");
     }
 }
