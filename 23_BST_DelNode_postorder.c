@@ -139,17 +139,17 @@ int main() {
     int choice, value;
 
     while (1) {
-        printf("\nMenu:\n");
-        printf("1. Insert Node\n");
-        printf("2. Delete Node\n");
-        printf("3. Postorder Traversal\n");
-        printf("4. Exit\n");
-        printf("Enter your choice: ");
+        // printf("\nMenu:\n");
+        // printf("1. Insert Node\n");
+        // printf("2. Delete Node\n");
+        // printf("3. Postorder Traversal\n");
+        // printf("4. Exit\n");
+        // printf("Enter your choice: ");
         scanf("%d", &choice);
 
         switch (choice) {
             case 1:
-                printf("Enter value to insert: ");
+                printf("Enter value to insert: \n");
                 scanf("%d", &value);
                 root = insertNode(root, value);
                 break;
@@ -173,3 +173,30 @@ int main() {
 
     return 0;
 }
+
+
+// 1
+// 23
+// 1
+// 19
+// 1
+// 25
+// 1
+// 17
+// 1
+// 21
+// 1
+// 24
+// 1
+// 28
+// 3
+// 2
+// 28
+// 3
+// 2
+// 25
+// 3
+// 2
+// 19
+// 3
+// 4
