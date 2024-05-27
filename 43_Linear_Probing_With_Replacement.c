@@ -102,3 +102,5 @@ void Display_HashTable(int arr[],int chain[])
 
     }
 }
+
+// 11 101 88 18 48 3 70 19 16 26
