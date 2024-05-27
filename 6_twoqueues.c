@@ -9,7 +9,70 @@ struct TwoQueues {
     int front2, rear2;
 };
 
-// Initialize the queues
+// Function prototypes
+void initializeQueues(struct TwoQueues* q);
+void addq1(struct TwoQueues* q, int value);
+void addq2(struct TwoQueues* q, int value);
+int delq1(struct TwoQueues* q);
+int delq2(struct TwoQueues* q);
+void displayQueue1(struct TwoQueues* q);
+void displayQueue2(struct TwoQueues* q);
+
+int main() {
+    struct TwoQueues q;
+    initializeQueues(&q);
+
+    int choice, value;
+
+    do {
+        // Display menu
+        printf("\n----- Menu -----\n");
+        printf("1. Add element to Queue 1\n");
+        printf("2. Add element to Queue 2\n");
+        printf("3. Delete element from Queue 1\n");
+        printf("4. Delete element from Queue 2\n");
+        printf("5. Display Queue 1\n");
+        printf("6. Display Queue 2\n");
+        printf("7. Exit\n");
+        printf("Enter your choice: ");
+        scanf("%d", &choice);
+
+        // Perform action based on user's choice
+        switch (choice) {
+            case 1:
+                printf("Enter element to add to Queue 1: ");
+                scanf("%d", &value);
+                addq1(&q, value);
+                break;
+            case 2:
+                printf("Enter element to add to Queue 2: ");
+                scanf("%d", &value);
+                addq2(&q, value);
+                break;
+            case 3:
+                printf("Deleted from Queue 1: %d\n", delq1(&q));
+                break;
+            case 4:
+                printf("Deleted from Queue 2: %d\n", delq2(&q));
+                break;
+            case 5:
+                displayQueue1(&q);
+                break;
+            case 6:
+                displayQueue2(&q);
+                break;
+            case 7:
+                printf("Exiting...\n");
+                break;
+            default:
+                printf("Invalid choice\n");
+        }
+    } while (choice != 7);
+
+    return 0;
+}
+
+// Function to initialize the queues
 void initializeQueues(struct TwoQueues* q) {
     q->front1 = q->rear1 = -1;
     q->front2 = q->rear2 = MAX;
@@ -91,31 +154,4 @@ void displayQueue2(struct TwoQueues* q) {
         }
         printf("\n");
     }
-}
-
-int main() {
-    struct TwoQueues q;
-    initializeQueues(&q);
-
-    // Add elements to Queue 1
-    addq1(&q, 10);
-    addq1(&q, 20);
-    addq1(&q, 30);
-    displayQueue1(&q);
-
-    // Add elements to Queue 2
-    addq2(&q, 100);
-    addq2(&q, 200);
-    addq2(&q, 300);
-    displayQueue2(&q);
-
-    // Delete elements from Queue 1
-    printf("Deleted from Queue 1: %d\n", delq1(&q));
-    displayQueue1(&q);
-
-    // Delete elements from Queue 2
-    printf("Deleted from Queue 2: %d\n", delq2(&q));
-    displayQueue2(&q);
-
-    return 0;
 }
