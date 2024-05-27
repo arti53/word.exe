@@ -146,3 +146,6 @@ int main() {
 
     return 0;
 }
+
+
+//Input 1 2 1 5 2 3 2 7 3 4 5 6 7
