@@ -140,18 +140,18 @@ int main() {
     int choice, value, count;
 
     while (1) {
-        printf("\nMenu:\n");
-        printf("1. Insert Node\n");
-        printf("2. Preorder Traversal\n");
-        printf("3. Display Total Number of Nodes\n");
-        printf("4. Display Leaf Nodes\n");
-        printf("5. Exit\n");
-        printf("Enter your choice: ");
+        // printf("\nMenu:\n");
+        // printf("1. Insert Node\n");
+        // printf("2. Preorder Traversal\n");
+        // printf("3. Display Total Number of Nodes\n");
+        // printf("4. Display Leaf Nodes\n");
+        // printf("5. Exit\n");
+        // printf("Enter your choice: ");
         scanf("%d", &choice);
 
         switch (choice) {
             case 1:
-                printf("Enter value to insert: ");
+                printf("Enter value to insert: \n");
                 scanf("%d", &value);
                 root = insertNode(root, value);
                 break;
@@ -179,3 +179,23 @@ int main() {
 
     return 0;
 }
+
+
+// 1
+// 23
+// 1
+// 19
+// 1
+// 25
+// 1
+// 17
+// 1
+// 21
+// 1
+// 24
+// 1
+// 28
+// 2
+// 3
+// 4
+// 5
