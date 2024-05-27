@@ -84,21 +84,22 @@ int matrix(){
 
 int main() { 
     int m,f;
-    while(1){
-        printf("\n1.Prims Algorithm using matrix \n2.Exit \n");
-        printf("\nEnter which algorithm : ");
-        scanf("%d",&m);
-        switch(m){
-            case 1:
+    
                 f = matrix();
                 primsmatrix(G,f);
-                break;
-            case 2:
-                exit(0);
-            default:
-                printf("\nEnter a valid option.");
-        }
-    }
-
+        
     return 0;
 }
+
+// 6
+// 9
+// 0 1 3
+// 0 2 8
+// 1 5 7
+// 1 3 3
+// 2 3 9
+// 2 4 7
+// 3 4 2
+// 0 3 6
+// 3 5 1
+// 0
