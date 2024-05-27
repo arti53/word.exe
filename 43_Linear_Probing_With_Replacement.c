@@ -1,63 +1,181 @@
+// //Without replacement
+
+// #include <stdio.h>
+
+// void Insert_HashTable(int arr[],int iKey,int chain[]);
+// void Display_HashTable(int arr[],int chain[]);
+
+// int count = 0;
+
+// int main(void)
+// {
+//     int arr[10];
+//     int chain[10];
+//     int iKey;
+
+//     for(int i=0;i<10;i++)
+//     {
+//         arr[i] = -1;
+//         chain[i] = -1;
+//     }
+
+//     printf("Enter Data:\n");
+
+//     for(int i=0;i<10;i++)
+//     {
+//         scanf("%d",&iKey);
+//         Insert_HashTable(arr,iKey,chain);
+//     }
+
+//     Display_HashTable(arr,chain);
+//     printf("Count %d",count);
+
+// }
+
+// void Insert_HashTable(int arr[],int iKey,int chain[])
+// {
+//     int iPos;
+
+//     iPos = iKey%10;
+
+//     if(arr[iPos]==-1)
+//     {
+//         arr[iPos] = iKey;
+//         return;
+//     }
+
+//     for(int i=0;i<10;i++)
+//     {
+//         count++;
+//         if(arr[(iPos+i)%10]==-1)
+//         {
+//             arr[(iPos+i)%10] = iKey;
+//             for(int j=0;j<10;j++)
+//             {
+//                 if((arr[j]!=iKey) && (arr[j]%10==iKey%10) && (chain[j]==-1))
+//                 {
+//                    chain[j] = (iPos+i)%10;
+//                    return;
+//                 }
+//             }
+//         }
+//     }
+// }
+
+// void Display_HashTable(int arr[],int chain[])
+// {
+//     for(int i=0;i<10;i++)
+//     {
+//         if(arr[i]!=-1)
+//         {
+//            printf("[%d]  %d->%d\n",i,arr[i],chain[i]);
+//         }
+
+//     }
+// }
+
+
+// with replacement
+
 #include <stdio.h>
-#include <stdlib.h>
+
+void Insert_HashTable(int arr[],int iKey,int chain[]);
+void Display_HashTable(int arr[],int chain[]);
+
 int count = 0;
- void insert(int item, int arr[], int chain[], int n) {
-    int key = item % n, origKey = key;
-    if (arr[key] == -1) {
-        // If the slot is empty, directly insert the item
-        arr[key] = item;
-    } else {
-        int startKey = key; // Remember where we started to avoid infinite loops
-        while (1) {
-            if (arr[key] == -1) {
-                // Found an empty slot; insert here
-                arr[key] = item;
-                break;
-            } else if (item > arr[key]) {
-                // Replace if new item is greater
-                int oldItem = arr[key];
-                arr[key] = item; // Place the new item
-                item = oldItem; // Prepare to re-insert the old item
-                count++;
-            }
-            origKey = key; // Move the origin key to current
-            key = (key + 1) % n; // Move to the next slot
-            if (key == startKey) {
-                printf("Hash table is full or cannot place the item\n");
-                break; // If we come full circle, stop trying to insert
-            }
-        }
-    }
- }
- void display(int arr[], int n) {
-    printf("\nHash Table\n");
-    for (int i = 0; i < n; i++) {
-        printf("%d -> %d\n", i, arr[i]);
-    }
-    printf("Total number of collisions: %d\n", count); 
- }
- int main() {
-    int n, c, item;
-    printf("Enter size of hash table: ");
-    scanf("%d", &n);
-    int arr[n];
-    for (int i = 0; i < n; i++) {
+
+int main(void)
+{
+    int arr[10];
+    int chain[10];
+    int iKey;
+
+    for(int i=0;i<10;i++)
+    {
         arr[i] = -1;
+        chain[i] = -1;
     }
-    printf("1.Insert, 2.Display\n");
-    do {
-        printf("Enter choice: ");
-        scanf("%d", &c);
-        switch (c) {
-            case 1:
-                printf("Enter item to insert: ");
-                scanf("%d", &item);
-                insert(item, arr, NULL, n); // Ignore chain
-                break;
-            case 2:
-                display(arr, n);
-                break;
+
+    printf("Enter Data:\n");
+
+    for(int i=0;i<10;i++)
+    {
+        scanf("%d",&iKey);
+        Insert_HashTable(arr,iKey,chain);
+    }
+
+    Display_HashTable(arr,chain);
+    printf("Count %d",count);
+
+}
+
+void Insert_HashTable(int arr[],int iKey,int chain[])
+{
+    int iPos;
+
+    iPos = iKey%10;
+
+    if(arr[iPos]==-1)
+    {
+        arr[iPos] = iKey;
+        return;
+    }
+
+    if(arr[iPos]!=-1 && arr[iPos]%10!=iPos)
+    {
+        for(int i=0;i<10;i++)
+        {
+            count++;
+            if(arr[(iPos+i)%10]==-1)
+            {
+                arr[(iPos+i)%10] = arr[iPos];
+                arr[iPos] = iKey;
+                for(int j=0;j<10;j++)
+                {
+                    if(chain[j]==iPos)
+                    {
+                        printf("%d\t",iPos);
+                        if(chain[iPos]!=-1)
+                        {
+                           chain[j] = chain[iPos];
+                           chain[iPos] = -1;
+                        }
+                       chain[chain[j]] = (iPos+i)%10;
+                       return;
+                        
+                    }
+                }
+            }
         }
-    } while (c != 2); // Continue until 'Display' is chosen
-    return 0;
- }
+    }
+
+    for(int i=0;i<10;i++)
+    {
+        count++;
+        if(arr[(iPos+i)%10]==-1)
+        {
+            arr[(iPos+i)%10] = iKey;
+            for(int j=0;j<10;j++)
+            {
+                if((arr[j]!=iKey) && (arr[j]%10==iKey%10) && (chain[j]==-1))
+                {
+                   chain[j] = (iPos+i)%10;
+                   return;
+                }
+            }
+        }
+    }
+
+}
+
+void Display_HashTable(int arr[],int chain[])
+{
+    for(int i=0;i<10;i++)
+    {
+        if(arr[i]!=-1)
+        {
+           printf("[%d]  %d->%d\n",i,arr[i],chain[i]);
+        }
+
+    }
+}
