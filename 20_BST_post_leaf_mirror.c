@@ -28,7 +28,7 @@ struct Stack* createStack(unsigned capacity) {
     struct Stack* stack = (struct Stack*)malloc(sizeof(struct Stack));
     stack->capacity = capacity;
     stack->top = -1;
-    stack->array = (struct Node**)malloc(stack->capacity * sizeof(struct Node*));
+    stack->array = (struct Node*)malloc(stack->capacity * sizeof(struct Node));
     return stack;
 }
 
@@ -56,6 +56,21 @@ struct Node* pop(struct Stack* stack) {
     return stack->array[stack->top--];
 }
 
+// Function to insert a node into the BST
+struct Node* insertNode(struct Node* node, int data) {
+    if (node == NULL) {
+        return createNode(data);
+    }
+
+    if (data < node->data) {
+        node->left = insertNode(node->left, data);
+    } else if (data > node->data) {
+        node->right = insertNode(node->right, data);
+    }
+
+    return node;
+}
+
 // Function to perform postorder traversal iteratively
 void postorderTraversal(struct Node* root) {
     if (root == NULL)
@@ -78,47 +93,6 @@ void postorderTraversal(struct Node* root) {
     while (!isEmpty(stack2)) {
         struct Node* temp = pop(stack2);
         printf("%d ", temp->data);
-    }
-    printf("\n");
-}
-
-// Function to perform inorder traversal iteratively
-void inorderTraversal(struct Node* root) {
-    if (root == NULL)
-        return;
-
-    struct Stack* stack = createStack(100);
-    struct Node* current = root;
-
-    while (current != NULL || !isEmpty(stack)) {
-        while (current != NULL) {
-            push(stack, current);
-            current = current->left;
-        }
-
-        current = pop(stack);
-        printf("%d ", current->data);
-        current = current->right;
-    }
-    printf("\n");
-}
-
-// Function to perform preorder traversal iteratively
-void preorderTraversal(struct Node* root) {
-    if (root == NULL)
-        return;
-
-    struct Stack* stack = createStack(100);
-    push(stack, root);
-
-    while (!isEmpty(stack)) {
-        struct Node* temp = pop(stack);
-        printf("%d ", temp->data);
-
-        if (temp->right)
-            push(stack, temp->right);
-        if (temp->left)
-            push(stack, temp->left);
     }
     printf("\n");
 }
@@ -168,48 +142,39 @@ void mirrorTree(struct Node* root) {
 
 // Driver program
 int main() {
-    // Creating a sample binary tree
-    struct Node* root = createNode(1);
-    root->left = createNode(2);
-    root->right = createNode(3);
-    root->left->left = createNode(4);
-    root->left->right = createNode(5);
+    struct Node* root = NULL;
+    int choice, value;
 
-    int choice;
     while (1) {
-        printf("Menu:\n");
-        printf("1. Postorder Traversal\n");
-        printf("2. Inorder Traversal\n");
-        printf("3. Preorder Traversal\n");
-        printf("4. Display Leaf Nodes\n");
-        printf("5. Mirror the Tree\n");
-        printf("6. Exit\n");
-        printf("Enter your choice: ");
+        // printf("\nMenu:\n");
+        // printf("1. Insert Node\n");
+        // printf("2. Postorder Traversal\n");
+        // printf("3. Display Leaf Nodes\n");
+        // printf("4. Mirror the Tree\n");
+        // printf("5. Exit\n");
+        // printf("Enter your choice: ");
         scanf("%d", &choice);
 
         switch (choice) {
             case 1:
-                printf("Postorder Traversal: ");
-                postorderTraversal(root);
+                printf("Enter the value to insert: \n");
+                scanf("%d", &value);
+                root = insertNode(root, value);
                 break;
             case 2:
-                printf("Inorder Traversal: ");
-                inorderTraversal(root);
+                printf("Postorder Traversal: \n");
+                postorderTraversal(root);
                 break;
             case 3:
-                printf("Preorder Traversal: ");
-                preorderTraversal(root);
-                break;
-            case 4:
-                printf("Leaf Nodes: ");
+                printf("Leaf Nodes: \n");
                 displayLeafNodes(root);
                 break;
-            case 5:
+            case 4:
                 mirrorTree(root);
                 printf("Tree has been mirrored.\n");
                 break;
-            case 6:
-                printf("Exiting...\n");
+            case 5:
+                printf("Exiting!!!\n");
                 exit(0);
                 break;
             default:
@@ -219,3 +184,24 @@ int main() {
 
     return 0;
 }
+
+
+// 1
+// 23
+// 1
+// 19
+// 1
+// 25
+// 1
+// 17
+// 1
+// 21
+// 1
+// 24
+// 1
+// 28
+// 2
+// 3
+// 4
+// 2
+// 5
