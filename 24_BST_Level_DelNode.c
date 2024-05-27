@@ -108,27 +108,27 @@ int main() {
     int choice, value;
 
     while (1) {
-        printf("\nMenu:\n");
-        printf("1. Insert Node\n");
-        printf("2. Delete Node\n");
-        printf("3. Display Level Order\n");
-        printf("4. Exit\n");
-        printf("Enter your choice: ");
+        // printf("\nMenu:\n");
+        // printf("1. Insert Node\n");
+        // printf("2. Delete Node\n");
+        // printf("3. Display Level Order\n");
+        // printf("4. Exit\n");
+        // printf("Enter your choice: ");
         scanf("%d", &choice);
 
         switch (choice) {
             case 1:
-                printf("Enter value to insert: ");
+                printf("Enter value to insert: \n");
                 scanf("%d", &value);
                 root = insertNode(root, value);
                 break;
             case 2:
-                printf("Enter value to delete: ");
+                printf("Enter value to delete: \n");
                 scanf("%d", &value);
                 root = deleteNode(root, value);
                 break;
             case 3:
-                printf("Level Order Traversal: ");
+                printf("Level Order Traversal: \n");
                 printLevelOrder(root);
                 printf("\n");
                 break;
@@ -142,3 +142,24 @@ int main() {
 
     return 0;
 }
+
+
+// 1
+// 23
+// 1
+// 19
+// 1
+// 25
+// 1
+// 17
+// 1
+// 21
+// 1
+// 24
+// 1
+// 28
+// 3
+// 2
+// 21
+// 3
+// 4
