@@ -169,28 +169,28 @@ int main() {
     Node* foundNode;
 
     while (1) {
-        printf("\nMenu:\n");
-        printf("1. Insert\n");
-        printf("2. Delete\n");
-        printf("3. Find\n");
-        printf("4. Level-wise Display\n");
-        printf("5. Exit\n");
-        printf("Enter your choice: ");
+        // printf("\nMenu:\n");
+        // printf("1. Insert\n");
+        // printf("2. Delete\n");
+        // printf("3. Find\n");
+        // printf("4. Level-wise Display\n");
+        // printf("5. Exit\n");
+        // printf("Enter your choice: ");
         scanf("%d", &choice);
 
         switch (choice) {
             case 1:
-                printf("Enter the data to insert: ");
+                printf("Enter the data to insert: \n");
                 scanf("%d", &data);
                 root = insertNode(root, data);
                 break;
             case 2:
-                printf("Enter the data to delete: ");
+                printf("Enter the data to delete: \n");
                 scanf("%d", &data);
                 root = deleteNode(root, data);
                 break;
             case 3:
-                printf("Enter the data to find: ");
+                printf("Enter the data to find: \n");
                 scanf("%d", &data);
                 foundNode = findNode(root, data);
                 if (foundNode) {
@@ -212,3 +212,26 @@ int main() {
 
     return 0;
 }
+
+1
+23
+1
+19
+1
+25
+1
+17
+1
+21
+1
+24
+1
+28
+4
+2
+21
+4
+3
+19
+4
+5
