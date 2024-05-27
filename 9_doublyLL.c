@@ -126,39 +126,46 @@ void printList(struct Node* node) {
 
 int main() {
     struct Node* head = NULL;
+    int choice, data;
 
-    // Insert at the beginning
-    insertAtBeginning(&head, 10);
-    insertAtBeginning(&head, 20);
-    insertAtBeginning(&head, 30);
-    printf("List after inserting at the beginning: ");
-    printList(head);
+    while (1) {
+        printf("\nMenu:\n");
+        printf("1. Insert at beginning\n");
+        printf("2. Insert at end\n");
+        printf("3. Delete the first node\n");
+        printf("4. Delete the last node\n");
+        printf("5. Print the list\n");
+        printf("6. Exit\n");
+        printf("Enter your choice: ");
+        scanf("%d", &choice);
 
-    // Insert at the end
-    insertAtEnd(&head, 40);
-    insertAtEnd(&head, 50);
-    printf("List after inserting at the end: ");
-    printList(head);
-
-    // Insert after a given node
-    insertAfter(head->next, 25);
-    printf("List after inserting 25 after the second node: ");
-    printList(head);
-
-    // Delete the first node
-    deleteFirstNode(&head);
-    printf("List after deleting the first node: ");
-    printList(head);
-
-    // Delete the last node
-    deleteLastNode(&head);
-    printf("List after deleting the last node: ");
-    printList(head);
-
-    // Delete a node with a given value
-    deleteNode(&head, 25);
-    printf("List after deleting the node with value 25: ");
-    printList(head);
-
+        switch (choice) {
+            case 1:
+                printf("Enter data to insert at the beginning: ");
+                scanf("%d", &data);
+                insertAtBeginning(&head, data);
+                break;
+            case 2:
+                printf("Enter data to insert at the end: ");
+                scanf("%d", &data);
+                insertAtEnd(&head, data);
+                break;
+            case 3:
+                deleteFirstNode(&head);
+                break;
+            case 4:
+                deleteLastNode(&head);
+                break;
+            case 5:
+                printf("Current list: ");
+                printList(head);
+                break;
+            case 6:
+                printf("Exiting...\n");
+                return 0;
+            default:
+                printf("Invalid choice. Please try again.\n");
+        }
+    }
     return 0;
 }
