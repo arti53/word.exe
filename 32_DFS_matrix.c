@@ -1,92 +1,151 @@
-#include<stdio.h>
-#define max 100
-int stack[max],n;
-int top = -1;
+#include <stdio.h>
+#include <stdlib.h>
 
-int stackempty(){
-    if(top == -1){
-        return 0;
+struct stack
+{
+    int capacity;
+    int top;
+    int *arr;
+};
+
+struct stack *createStack(int capacity)
+{
+    struct stack *st = (struct stack *)malloc(sizeof(struct stack));
+    st->capacity = capacity;
+    st->top = -1;
+    st->arr = (int *)malloc(sizeof(int) * st->capacity);
+    return st;
+}
+
+void push(struct stack *st, int data)
+{
+    if (st->top >= st->capacity)
+    {
+        return;
     }
-    else{
+
+    st->arr[++st->top] = data;
+}
+
+int isEmpty(struct stack *st)
+{
+    if (st->top < 0)
+    {
         return 1;
     }
+
+    return 0;
 }
 
-void push(int a){
-    if(top == (max-1)){
-        printf("\nStack Overflow ");
-    }
-    else{
-        stack[++top] = a;
-    }
-}
-
-int pop(){
-    int a;
-    if(top == -1){
-        printf("\nStack underflow");
+int pop(struct stack *st)
+{
+    if (isEmpty(st))
+    {
         return -1;
     }
-    else{
-        a = stack[top--];
-    }
-    return a;
+
+    return st->arr[st->top--];
 }
 
-void DFS(int G[10][10], int n){
-    int visited[10] , v;
+struct queue
+{
+    int f, r;
+    int capacity;
+    int *arr;
+};
 
-    for (int i = 1; i <= n; i++) {
-        visited[i] = 0;
+struct queue *createQueue(int capacity)
+{
+    struct queue *q = (struct queue *)malloc(sizeof(struct queue));
+    q->f = q->r = -1;
+    q->capacity = capacity;
+    q->arr = (int *)malloc(sizeof(int) * q->capacity);
+    return q;
+}
+
+void enqueue(struct queue *q, int value)
+{
+    if (q->r == q->capacity - 1)
+    {
+        printf("full\n");
+        return;
+    }
+    q->arr[++q->r] = value;
+}
+
+int dequeue(struct queue *q)
+{
+    if (q->f == q->r)
+    {
+        printf("Empty \n");
+        return -1;
     }
 
-    printf("\nEnter start vertex : ");
-    scanf("%d", &v);
+    return q->arr[++q->f];
+}
 
-    visited[v] = 1;
-    push(v);
 
-    while(stackempty() != 0){
-        v = pop();
-        printf("-%d",v);
-
-        for(int i=1; i<=n; i++){
-            if(G[v][i] == 1 && visited[i] == 0){
+void DFS(int v, int g[v][v])
+{
+    int visited[v], start, w;
+    for (int i = 0; i < v; i++)
+    {
+        visited[i] = 0;
+    }
+    struct stack *st = createStack(20);
+    printf("Enter start vertex : ");
+    scanf("%d", &start);
+    visited[start] = 1;
+    push(st, start);
+    while (!isEmpty(st))
+    {
+        w = pop(st);
+        printf("%d ", w);
+        for (int i = 0; i < v; i++)
+        {
+            if (g[w][i] == 1 && visited[i] == 0)
+            {
+                push(st, i);
                 visited[i] = 1;
-                push(i);
             }
         }
     }
 }
 
-int main() {
-    int G[10][10];
-    int a, b, e;
-
-    printf("Enter the no of vertex : ");
+void main()
+{
+    int n, e, u, v;
+    printf("Enter number of vertices : ");
     scanf("%d", &n);
-
-    for (int i = 1; i <= n; i++) {
-        for (int j = 1; j <= n; j++) {
-            G[i][j] = 0;
+    int adjMatrix[n][n];
+    for (int i = 0; i < n; i++)
+    {
+        for (int j = 0; j < n; j++)
+        {
+            adjMatrix[i][j] = 0;
         }
     }
-
-    printf("\nEnter the no of edges : ");
+    printf("Enter number of edges : ");
     scanf("%d", &e);
-
-    for (int i = 1; i <= e; i++) {
-        printf("\nEnter edge : ");
-        scanf("%d %d", &a, &b);
-        G[a][b] = G[b][a] = 1;
+    for (int i = 0; i < e; i++)
+    {
+        printf("Enter edge (start - end) : ");
+        scanf("%d %d", &u, &v);
+        adjMatrix[u][v] = adjMatrix[v][u] = 1;
     }
 
-    for (int i = 1; i <= n; i++) {
-        for (int j = 1; j <= n; j++) {
-            printf("%5d ", G[i][j]);
+    for (int i = 0; i < n; i++)
+    {
+        for (int j = 0; j < n; j++)
+        {
+            printf("%d ", adjMatrix[i][j]);
         }
         printf("\n");
     }
+
+    DFS(n, adjMatrix);
+}
+
 
 // 5
 // 6
@@ -97,7 +156,3 @@ int main() {
 // 1 2
 // 4 3
 // 0
-
-    DFS(G, n);
-    return 0;
-}
