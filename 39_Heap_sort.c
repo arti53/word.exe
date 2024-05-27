@@ -81,3 +81,10 @@ int main() {
     free(s);
     return 0;
 }
+
+// 5
+// 43 abc 98
+// 35 xyz 76
+// 2 qwe 89
+// 12 tyu 91
+// 24 hjk 56
