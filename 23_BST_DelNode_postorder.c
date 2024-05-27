@@ -1,3 +1,4 @@
+
 #include <stdio.h>
 #include <stdlib.h>
 
@@ -18,17 +19,39 @@ struct Node* createNode(int data) {
 
 // Function to insert a node into the BST
 struct Node* insertNode(struct Node* root, int data) {
+    struct Node* newNode = createNode(data);
+
+    // If the tree is empty, return a new node
     if (root == NULL) {
-        return createNode(data);
+        return newNode;
     }
 
-    if (data < root->data) {
-        root->left = insertNode(root->left, data);
-    } else if (data > root->data) {
-        root->right = insertNode(root->right, data);
+    struct Node* current = root;
+    struct Node* parent = NULL;
+
+    // Traverse the tree to find the insertion point
+    while (current != NULL) {
+        parent = current;
+        if (data < current->data) {
+            current = current->left;
+        } else if (data > current->data) {
+            current = current->right;
+        } else {
+            // If the data is already in the tree, do nothing and return the root
+            free(newNode);
+            return root;
+        }
+    }
+
+    // Insert the new node as a child of the parent node
+    if (data < parent->data) {
+        parent->left = newNode;
+    } else {
+        parent->right = newNode;
     }
 
     return root;
+
 }
 
 // Function to find the minimum value node in the BST
@@ -41,28 +64,60 @@ struct Node* findMin(struct Node* root) {
 
 // Function to delete a node from the BST
 struct Node* deleteNode(struct Node* root, int data) {
-    if (root == NULL) {
+    struct Node* parent = NULL;
+    struct Node* current = root;
+
+    // Find the node to be deleted and its parent
+    while (current != NULL && current->data != data) {
+        parent = current;
+        if (data < current->data) {
+            current = current->left;
+        } else {
+            current = current->right;
+        }
+    }
+
+    // If the node was not found
+    if (current == NULL) {
         return root;
     }
 
-    if (data < root->data) {
-        root->left = deleteNode(root->left, data);
-    } else if (data > root->data) {
-        root->right = deleteNode(root->right, data);
-    } else {
-        if (root->left == NULL) {
-            struct Node* temp = root->right;
-            free(root);
-            return temp;
-        } else if (root->right == NULL) {
-            struct Node* temp = root->left;
-            free(root);
-            return temp;
+    // Case 1: Node to be deleted has no children (leaf node)
+    if (current->left == NULL && current->right == NULL) {
+        if (current != root) {
+            if (parent->left == current) {
+                parent->left = NULL;
+            } else {
+                parent->right = NULL;
+            }
+        } else {
+            root = NULL;
         }
+        free(current);
+    }
 
-        struct Node* temp = findMin(root->right);
-        root->data = temp->data;
-        root->right = deleteNode(root->right, temp->data);
+    // Case 2: Node to be deleted has two children
+    else if (current->left && current->right) {
+        struct Node* successor = findMin(current->right);
+        int val = successor->data;
+        deleteNode(root, successor->data);
+        current->data = val;
+    }
+
+    // Case 3: Node to be deleted has only one child
+    else {
+        struct Node* child = (current->left) ? current->left : current->right;
+
+        if (current != root) {
+            if (current == parent->left) {
+                parent->left = child;
+            } else {
+                parent->right = child;
+            }
+        } else {
+            root = child;
+        }
+        free(current);
     }
 
     return root;
@@ -159,7 +214,7 @@ int main() {
                 root = deleteNode(root, value);
                 break;
             case 3:
-                printf("Postorder Traversal: ");
+                printf("\nPostorder Traversal: ");
                 postorderTraversal(root);
                 printf("\n");
                 break;
