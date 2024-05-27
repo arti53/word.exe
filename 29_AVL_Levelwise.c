@@ -115,6 +115,17 @@ Node* insert(Node* node, int key) {
     // Return the unchanged node pointer
     return node;
 }
+// Function to print nodes at a given level
+void printGivenLevel(Node* root, int level) {
+    if (root == NULL)
+        return;
+    if (level == 1)
+        printf("%d ", root->key);
+    else if (level > 1) {
+        printGivenLevel(root->left, level - 1);
+        printGivenLevel(root->right, level - 1);
+    }
+}
 
 // Function to print level order traversal of AVL tree
 void printLevelOrder(Node* root) {
@@ -126,18 +137,6 @@ void printLevelOrder(Node* root) {
     for (i = 1; i <= h; i++) {
         printGivenLevel(root, i);
         printf("\n");
-    }
-}
-
-// Function to print nodes at a given level
-void printGivenLevel(Node* root, int level) {
-    if (root == NULL)
-        return;
-    if (level == 1)
-        printf("%d ", root->key);
-    else if (level > 1) {
-        printGivenLevel(root->left, level - 1);
-        printGivenLevel(root->right, level - 1);
     }
 }
 
