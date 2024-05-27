@@ -16,6 +16,42 @@ struct Node* createNode(int data) {
     return newNode;
 }
 
+// Function to insert a node into the BST non-recursively
+struct Node* insertNode(struct Node* root, int data) {
+    struct Node* newNode = createNode(data);
+
+    // If the tree is empty, return a new node
+    if (root == NULL) {
+        return newNode;
+    }
+
+    struct Node* current = root;
+    struct Node* parent = NULL;
+
+    // Traverse the tree to find the insertion point
+    while (current != NULL) {
+        parent = current;
+        if (data < current->data) {
+            current = current->left;
+        } else if (data > current->data) {
+            current = current->right;
+        } else {
+            // If the data is already in the tree, do nothing and return the root
+            free(newNode);
+            return root;
+        }
+    }
+
+    // Insert the new node as a child of the parent node
+    if (data < parent->data) {
+        parent->left = newNode;
+    } else {
+        parent->right = newNode;
+    }
+
+    return root;
+}
+
 // Stack structure for non-recursive traversal
 struct Stack {
     int top;
@@ -28,7 +64,7 @@ struct Stack* createStack(unsigned capacity) {
     struct Stack* stack = (struct Stack*)malloc(sizeof(struct Stack));
     stack->capacity = capacity;
     stack->top = -1;
-    stack->array = (struct Node*)malloc(stack->capacity * sizeof(struct Node));
+    stack->array = (struct Node**)malloc(stack->capacity * sizeof(struct Node*));
     return stack;
 }
 
@@ -54,21 +90,6 @@ struct Node* pop(struct Stack* stack) {
     if (isEmpty(stack))
         return NULL;
     return stack->array[stack->top--];
-}
-
-// Function to insert a node into the BST
-struct Node* insertNode(struct Node* node, int data) {
-    if (node == NULL) {
-        return createNode(data);
-    }
-
-    if (data < node->data) {
-        node->left = insertNode(node->left, data);
-    } else if (data > node->data) {
-        node->right = insertNode(node->right, data);
-    }
-
-    return node;
 }
 
 // Function to perform postorder traversal iteratively
@@ -146,13 +167,13 @@ int main() {
     int choice, value;
 
     while (1) {
-        // printf("\nMenu:\n");
-        // printf("1. Insert Node\n");
-        // printf("2. Postorder Traversal\n");
-        // printf("3. Display Leaf Nodes\n");
-        // printf("4. Mirror the Tree\n");
-        // printf("5. Exit\n");
-        // printf("Enter your choice: ");
+        printf("\nMenu:\n");
+        printf("1. Insert Node\n");
+        printf("2. Postorder Traversal\n");
+        printf("3. Display Leaf Nodes\n");
+        printf("4. Mirror the Tree\n");
+        printf("5. Exit\n");
+        printf("Enter your choice: ");
         scanf("%d", &choice);
 
         switch (choice) {
@@ -184,6 +205,7 @@ int main() {
 
     return 0;
 }
+
 
 
 // 1
