@@ -62,49 +62,99 @@ struct Node* createNode(int data) {
     return newNode;
 }
 
-// Function to insert a node into the BST
+// Function to insert a node into the BST non-recursively
 struct Node* insertNode(struct Node* root, int data) {
+    struct Node* newNode = createNode(data);
     if (root == NULL) {
-        return createNode(data);
+        return newNode;
     }
 
-    if (data < root->data) {
-        root->left = insertNode(root->left, data);
-    } else if (data > root->data) {
-        root->right = insertNode(root->right, data);
+    struct Node* parent = NULL;
+    struct Node* current = root;
+    while (current != NULL) {
+        parent = current;
+        if (data < current->data) {
+            current = current->left;
+        } else if (data > current->data) {
+            current = current->right;
+        } else {
+            return root; // Duplicate value
+        }
+    }
+
+    if (data < parent->data) {
+        parent->left = newNode;
+    } else {
+        parent->right = newNode;
     }
 
     return root;
 }
 
-// Function to create a mirror image of the BST without disturbing the original tree
+// Function to create a mirror image of the BST without disturbing the original tree non-recursively
 struct Node* mirrorTree(struct Node* root) {
     if (root == NULL) {
         return NULL;
     }
 
-    struct Node* newNode = createNode(root->data);
-    newNode->left = mirrorTree(root->right);
-    newNode->right = mirrorTree(root->left);
+    struct Node* newRoot = createNode(root->data);
+    struct Queue* queue = createQueue(100);
+    struct Queue* newQueue = createQueue(100);
+    enqueue(queue, root);
+    enqueue(newQueue, newRoot);
 
-    return newNode;
+    while (!isEmpty(queue)) {
+        struct Node* current = dequeue(queue);
+        struct Node* newCurrent = dequeue(newQueue);
+
+        if (current->right) {
+            newCurrent->left = createNode(current->right->data);
+            enqueue(queue, current->right);
+            enqueue(newQueue, newCurrent->left);
+        }
+
+        if (current->left) {
+            newCurrent->right = createNode(current->left->data);
+            enqueue(queue, current->left);
+            enqueue(newQueue, newCurrent->right);
+        }
+    }
+
+    free(queue);
+    free(newQueue);
+
+    return newRoot;
 }
 
-// Function to create a mirror image of the BST by modifying the original tree
+// Function to create a mirror image of the BST by modifying the original tree non-recursively
 void mirrorTreeInPlace(struct Node* root) {
     if (root == NULL) {
         return;
     }
 
-    struct Node* temp = root->left;
-    root->left = root->right;
-    root->right = temp;
+    struct Queue* queue = createQueue(100);
+    enqueue(queue, root);
 
-    mirrorTreeInPlace(root->left);
-    mirrorTreeInPlace(root->right);
+    while (!isEmpty(queue)) {
+        struct Node* current = dequeue(queue);
+
+        struct Node* temp = current->left;
+        current->left = current->right;
+        current->right = temp;
+
+        if (current->left) {
+            enqueue(queue, current->left);
+        }
+
+        if (current->right) {
+            enqueue(queue, current->right);
+        }
+    }
+
+    free(queue);
 }
 
-// Function to print level order traversal of the tree
+// Function to print level order traversal of the tree non-recursively
 void printLevelOrder(struct Node* root) {
     if (root == NULL) {
         return;
@@ -124,6 +174,9 @@ void printLevelOrder(struct Node* root) {
             enqueue(queue, node->right);
         }
     }
+
+    free(queue);
+    printf("\n");
 }
 
 // Function to calculate the height of the tree using level order traversal (non-recursive)
@@ -164,14 +217,6 @@ int main() {
     int choice, value;
 
     while (1) {
-        // printf("\nMenu:\n");
-        // printf("1. Insert Node\n");
-        // printf("2. Display Level Order\n");
-        // printf("3. Display Mirror Image (without disturbing original tree)\n");
-        // printf("4. Display Mirror Image (in-place)\n");
-        // printf("5. Calculate Height of the Tree\n");
-        // printf("6. Exit\n");
-        //printf("Enter your choice: ");
         scanf("%d", &choice);
 
         switch (choice) {
@@ -183,19 +228,16 @@ int main() {
             case 2:
                 printf("Level Order Traversal: \n");
                 printLevelOrder(root);
-                printf("\n");
                 break;
             case 3:
                 mirrorRoot = mirrorTree(root);
                 printf("Mirror Image (without disturbing original tree): \n");
                 printLevelOrder(mirrorRoot);
-                printf("\n");
                 break;
             case 4:
                 mirrorTreeInPlace(root);
                 printf("Mirror Image (in-place): \n");
                 printLevelOrder(root);
-                printf("\n");
                 break;
             case 5:
                 printf("Height of the Tree: %d\n", calculateHeight(root));
