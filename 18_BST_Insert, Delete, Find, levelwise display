@@ -34,18 +34,38 @@ Node* createNode(int data) {
 
 // Function to insert a node into the BST
 Node* insertNode(Node* root, int data) {
+    Node* newNode = createNode(data);
     if (root == NULL) {
-        return createNode(data);
+        return newNode;
     }
 
-    if (data < root->data) {
-        root->left = insertNode(root->left, data);
-    } else if (data > root->data) {
-        root->right = insertNode(root->right, data);
+    Node* current = root;
+    Node* parent = NULL;
+
+    while (current != NULL) {
+        parent = current;
+        if (data < current->data) {
+            if (current->left == NULL) {
+                parent->left = newNode;
+                return root;
+            }
+            current = current->left;
+        } else if (data > current->data) {
+            if (current->right == NULL) {
+                parent->right = newNode;
+                return root;
+            }
+            current = current->right;
+        } else {
+            // If the data already exists in the tree, do nothing
+            free(newNode); // Free the allocated memory for the new node
+            return root;
+        }
     }
 
-    return root;
+    return root; // This line is added to handle edge cases
 }
+
 
 // Function to delete a node from the BST
 Node* deleteNode(Node* root, int data) {
