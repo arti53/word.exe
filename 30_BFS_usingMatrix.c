@@ -91,7 +91,7 @@ int main() {
     scanf("%d", &e);
 
     for (int i = 0; i < e; i++) {
-        printf("\nEnter edge : ");
+        printf("\nEnter edge : \n");
         scanf("%d %d", &a, &b);
         G[a][b] = G[b][a] = 1;
     }
@@ -104,19 +104,16 @@ int main() {
     }
 
     int m;
-    while(1){
-        printf("\n\nEnter which traversal : ");
-        printf("\n\n1.BFS \n2.exit\n");
-        scanf("%d",&m);
-        switch(m){
-            case 1:
                 BFS(G,n);
-                break;
-            case 2:
-                exit(0);
-            default:
-                printf("\nEnter the  valid option.");
-        }
-    }
-    return 0;
+               
 }
+
+// 5
+// 6
+// 0 1
+// 0 2
+// 1 4
+// 1 3
+// 1 2
+// 4 3
+// 0
