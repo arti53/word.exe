@@ -16,90 +16,156 @@ struct Node* createNode(int data) {
     return newNode;
 }
 
-// Function to insert a node into the BST
+// Function to insert a node into the BST non-recursively
 struct Node* insertNode(struct Node* root, int data) {
+    struct Node* newNode = createNode(data);
     if (root == NULL) {
-        return createNode(data);
+        return newNode;
     }
 
-    if (data < root->data) {
-        root->left = insertNode(root->left, data);
-    } else if (data > root->data) {
-        root->right = insertNode(root->right, data);
+    struct Node* parent = NULL;
+    struct Node* current = root;
+    while (current != NULL) {
+        parent = current;
+        if (data < current->data) {
+            current = current->left;
+        } else if (data > current->data) {
+            current = current->right;
+        } else {
+            return root; // Duplicate value
+        }
+    }
+
+    if (data < parent->data) {
+        parent->left = newNode;
+    } else {
+        parent->right = newNode;
     }
 
     return root;
 }
 
-// Function to find the minimum value node in the BST
+// Function to find the minimum value node in the BST non-recursively
 struct Node* findMin(struct Node* root) {
-    while (root->left != NULL) {
+    while (root != NULL && root->left != NULL) {
         root = root->left;
     }
     return root;
 }
 
-// Function to delete a node from the BST
+// Function to delete a node from the BST non-recursively
 struct Node* deleteNode(struct Node* root, int data) {
-    if (root == NULL) {
-        return root;
+    struct Node* parent = NULL;
+    struct Node* current = root;
+
+    while (current != NULL && current->data != data) {
+        parent = current;
+        if (data < current->data) {
+            current = current->left;
+        } else {
+            current = current->right;
+        }
     }
 
-    if (data < root->data) {
-        root->left = deleteNode(root->left, data);
-    } else if (data > root->data) {
-        root->right = deleteNode(root->right, data);
-    } else {
-        if (root->left == NULL) {
-            struct Node* temp = root->right;
-            free(root);
-            return temp;
-        } else if (root->right == NULL) {
-            struct Node* temp = root->left;
-            free(root);
-            return temp;
+    if (current == NULL) {
+        return root; // Node not found
+    }
+
+    if (current->left == NULL || current->right == NULL) {
+        struct Node* newCurrent;
+
+        if (current->left == NULL) {
+            newCurrent = current->right;
+        } else {
+            newCurrent = current->left;
         }
 
-        struct Node* temp = findMin(root->right);
-        root->data = temp->data;
-        root->right = deleteNode(root->right, temp->data);
+        if (parent == NULL) {
+            free(current);
+            return newCurrent;
+        }
+
+        if (current == parent->left) {
+            parent->left = newCurrent;
+        } else {
+            parent->right = newCurrent;
+        }
+
+        free(current);
+    } else {
+        struct Node* minNode = findMin(current->right);
+        int minValue = minNode->data;
+        root = deleteNode(root, minNode->data);
+        current->data = minValue;
     }
 
     return root;
 }
 
-// Function to find the height of the tree
-int height(struct Node* node) {
-    if (node == NULL)
+// Function to find the height of the tree non-recursively
+int height(struct Node* root) {
+    if (root == NULL)
         return 0;
-    else {
-        int lheight = height(node->left);
-        int rheight = height(node->right);
 
-        if (lheight > rheight)
-            return (lheight + 1);
-        else
-            return (rheight + 1);
+    int height = 0;
+    struct Node* queue[100];
+    int front = 0, rear = 0;
+
+    queue[rear++] = root;
+
+    while (front != rear) {
+        int nodeCount = rear - front;
+        height++;
+
+        while (nodeCount > 0) {
+            struct Node* node = queue[front++];
+            if (node->left != NULL)
+                queue[rear++] = node->left;
+            if (node->right != NULL)
+                queue[rear++] = node->right;
+            nodeCount--;
+        }
     }
+    return height;
 }
 
-// Function to print nodes at a given level
+// Function to print nodes at a given level non-recursively
 void printCurrentLevel(struct Node* root, int level) {
     if (root == NULL)
         return;
-    if (level == 1)
-        printf("%d ", root->data);
-    else if (level > 1) {
-        printCurrentLevel(root->left, level - 1);
-        printCurrentLevel(root->right, level - 1);
+
+    struct Node* queue[100];
+    int front = 0, rear = 0;
+
+    queue[rear++] = root;
+
+    int currentLevel = 1;
+    while (front != rear && currentLevel < level) {
+        int nodeCount = rear - front;
+        while (nodeCount > 0) {
+            struct Node* node = queue[front++];
+            if (node->left != NULL)
+                queue[rear++] = node->left;
+            if (node->right != NULL)
+                queue[rear++] = node->right;
+            nodeCount--;
+        }
+        currentLevel++;
+    }
+
+    while (front != rear) {
+        struct Node* node = queue[front++];
+        printf("%d ", node->data);
     }
 }
 
-// Function to print level order traversal of tree
+// Function to print level order traversal of tree non-recursively
 void printLevelOrder(struct Node* root) {
     int h = height(root);
-    for (int i = 1; i <= h; i++)
+    for (int i = 1; i <= h; i++) {
         printCurrentLevel(root, i);
+        printf("\n");
+    }
 }
 
 // Driver program
@@ -108,12 +174,6 @@ int main() {
     int choice, value;
 
     while (1) {
-        // printf("\nMenu:\n");
-        // printf("1. Insert Node\n");
-        // printf("2. Delete Node\n");
-        // printf("3. Display Level Order\n");
-        // printf("4. Exit\n");
-        // printf("Enter your choice: ");
         scanf("%d", &choice);
 
         switch (choice) {
@@ -142,7 +202,6 @@ int main() {
 
     return 0;
 }
-
 
 // 1
 // 23
