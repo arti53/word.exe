@@ -72,31 +72,6 @@ void clear_q(Queue *q) {
     printf("Queue Cleared\n");
 }
 
-void reverse_q(Queue *q) {
-    if (is_empty_q(q)) return;
-
-    Node *current = q->head;
-    Node *temp = NULL;
-
-    // Swap next and prev for all nodes
-    while (current != NULL) {
-        temp = current->prev;
-        current->prev = current->next;
-        current->next = temp;
-        current = current->prev;
-    }
-
-    // Swap head and tail pointers
-    if (temp != NULL) {
-        q->head = temp->prev;
-    }
-
-    // Update the tail pointer
-    q->tail = q->head;
-    while (q->tail->next != NULL) {
-        q->tail = q->tail->next;
-    }
-}
 
 void print_q(Queue *q) {
     for(Node* trav = q->head; trav != NULL; trav = trav->next)
@@ -159,10 +134,12 @@ int main() {
 }
 
 
+
 // 1 1
 // 1 2
 // 1 3
 // 1 4
+// 3
 // 2
 // 3
 // 5
