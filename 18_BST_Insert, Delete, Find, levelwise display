@@ -73,30 +73,73 @@ Node* deleteNode(Node* root, int data) {
         return root;
     }
 
-    if (data < root->data) {
-        root->left = deleteNode(root->left, data);
-    } else if (data > root->data) {
-        root->right = deleteNode(root->right, data);
-    } else {
-        // Node with only one child or no child
-        if (root->left == NULL) {
-            Node* temp = root->right;
-            free(root);
-            return temp;
-        } else if (root->right == NULL) {
-            Node* temp = root->left;
-            free(root);
-            return temp;
+    Node* parent = NULL;
+    Node* current = root;
+
+    // Find the node to be deleted and its parent
+    while (current != NULL && current->data != data) {
+        parent = current;
+        if (data < current->data) {
+            current = current->left;
+        } else {
+            current = current->right;
+        }
+    }
+
+    // If the node to be deleted is not found
+    if (current == NULL) {
+        return root;
+    }
+
+    // Case 1: Node with only one child or no child
+    if (current->left == NULL || current->right == NULL) {
+        Node* newCurrent;
+        if (current->left == NULL) {
+            newCurrent = current->right;
+        } else {
+            newCurrent = current->left;
         }
 
-        // Node with two children
-        Node* temp = minValueNode(root->right);
-        root->data = temp->data;
-        root->right = deleteNode(root->right, temp->data);
+        // If the node to be deleted is the root node
+        if (parent == NULL) {
+            free(current);
+            return newCurrent;
+        }
+
+        // Update the parent to point to the new current node
+        if (parent->left == current) {
+            parent->left = newCurrent;
+        } else {
+            parent->right = newCurrent;
+        }
+
+        free(current);
+    } else {
+        // Case 2: Node with two children
+        // Find the in-order successor and its parent
+        Node* successorParent = current;
+        Node* successor = current->right;
+        while (successor->left != NULL) {
+            successorParent = successor;
+            successor = successor->left;
+        }
+
+        // Copy the in-order successor's data to current node
+        current->data = successor->data;
+
+        // Delete the in-order successor
+        if (successorParent->left == successor) {
+            successorParent->left = successor->right;
+        } else {
+            successorParent->right = successor->right;
+        }
+
+        free(successor);
     }
 
     return root;
 }
+
 
 // Function to find the minimum value node in a BST
 Node* minValueNode(Node* node) {
@@ -233,25 +276,31 @@ int main() {
     return 0;
 }
 
-1
-23
-1
-19
-1
-25
-1
-17
-1
-21
-1
-24
-1
-28
-4
-2
-21
-4
-3
-19
-4
-5
+// 1
+// 23
+// 1
+// 19
+// 1
+// 25
+// 1
+// 17
+// 1
+// 21
+// 1
+// 24
+// 1
+// 28
+// 4
+// 2
+// 21
+// 4
+// 2
+// 25
+// 4
+// 2
+// 19
+// 4
+// 3
+// 17
+// 4
+// 5
